@@ -1,0 +1,10 @@
+
+platform :ios, '9.0'
+
+target 'RSwiftDemo' do
+  
+  use_frameworks!
+
+  pod 'R.swift'
+
+end
