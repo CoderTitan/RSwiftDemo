@@ -67,14 +67,21 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.nib` struct is generated, and contains static references to 1 nibs.
+  /// This `R.nib` struct is generated, and contains static references to 2 nibs.
   struct nib {
     /// Nib `ImageFontController`.
     static let imageFontController = _R.nib._ImageFontController()
+    /// Nib `NibTableViewCell`.
+    static let nibTableViewCell = _R.nib._NibTableViewCell()
     
     /// `UINib(name: "ImageFontController", in: bundle)`
     static func imageFontController(_: Void = ()) -> UIKit.UINib {
       return UIKit.UINib(resource: R.nib.imageFontController)
+    }
+    
+    /// `UINib(name: "NibTableViewCell", in: bundle)`
+    static func nibTableViewCell(_: Void = ()) -> UIKit.UINib {
+      return UIKit.UINib(resource: R.nib.nibTableViewCell)
     }
     
     fileprivate init() {}
@@ -90,12 +97,14 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.storyboard` struct is generated, and contains static references to 2 storyboards.
+  /// This `R.storyboard` struct is generated, and contains static references to 3 storyboards.
   struct storyboard {
     /// Storyboard `LaunchScreen`.
     static let launchScreen = _R.storyboard.launchScreen()
     /// Storyboard `Main`.
     static let main = _R.storyboard.main()
+    /// Storyboard `NibHome`.
+    static let nibHome = _R.storyboard.nibHome()
     
     /// `UIStoryboard(name: "LaunchScreen", bundle: ...)`
     static func launchScreen(_: Void = ()) -> UIKit.UIStoryboard {
@@ -105,6 +114,11 @@ struct R: Rswift.Validatable {
     /// `UIStoryboard(name: "Main", bundle: ...)`
     static func main(_: Void = ()) -> UIKit.UIStoryboard {
       return UIKit.UIStoryboard(resource: R.storyboard.main)
+    }
+    
+    /// `UIStoryboard(name: "NibHome", bundle: ...)`
+    static func nibHome(_: Void = ()) -> UIKit.UIStoryboard {
+      return UIKit.UIStoryboard(resource: R.storyboard.nibHome)
     }
     
     fileprivate init() {}
@@ -117,7 +131,7 @@ struct R: Rswift.Validatable {
   
   fileprivate struct intern: Rswift.Validatable {
     fileprivate static func validate() throws {
-      // There are no resources to validate
+      try _R.validate()
     }
     
     fileprivate init() {}
@@ -128,7 +142,11 @@ struct R: Rswift.Validatable {
   fileprivate init() {}
 }
 
-struct _R {
+struct _R: Rswift.Validatable {
+  static func validate() throws {
+    try storyboard.validate()
+  }
+  
   struct nib {
     struct _ImageFontController: Rswift.NibResourceType {
       let bundle = R.hostingBundle
@@ -141,10 +159,25 @@ struct _R {
       fileprivate init() {}
     }
     
+    struct _NibTableViewCell: Rswift.NibResourceType {
+      let bundle = R.hostingBundle
+      let name = "NibTableViewCell"
+      
+      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [NSObject : AnyObject]? = nil) -> NibTableViewCell? {
+        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? NibTableViewCell
+      }
+      
+      fileprivate init() {}
+    }
+    
     fileprivate init() {}
   }
   
-  struct storyboard {
+  struct storyboard: Rswift.Validatable {
+    static func validate() throws {
+      try nibHome.validate()
+    }
+    
     struct launchScreen: Rswift.StoryboardResourceWithInitialControllerType {
       typealias InitialController = UIKit.UIViewController
       
@@ -159,6 +192,22 @@ struct _R {
       
       let bundle = R.hostingBundle
       let name = "Main"
+      
+      fileprivate init() {}
+    }
+    
+    struct nibHome: Rswift.StoryboardResourceType, Rswift.Validatable {
+      let bundle = R.hostingBundle
+      let name = "NibHome"
+      let nibhome = StoryboardViewControllerResource<NibViewController>(identifier: "nibhome")
+      
+      func nibhome(_: Void = ()) -> NibViewController? {
+        return UIKit.UIStoryboard(resource: self).instantiateViewController(withResource: nibhome)
+      }
+      
+      static func validate() throws {
+        if _R.storyboard.nibHome().nibhome() == nil { throw Rswift.ValidationError(description:"[R.swift] ViewController with identifier 'nibhome' could not be loaded from storyboard 'NibHome' as 'NibViewController'.") }
+      }
       
       fileprivate init() {}
     }

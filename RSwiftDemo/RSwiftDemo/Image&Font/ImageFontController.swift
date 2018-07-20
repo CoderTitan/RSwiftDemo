@@ -29,8 +29,6 @@ class ImageFontController: UIViewController {
         
         //R.Swift方式
         newLabel.text = "这是R.Swift的设置方式"
-//        newLabel.backgroundColor = R.color.primaryBackground()
-//        newLabel.font = R.font.chalkduster(size: 35)
         
         let newImage = R.image.yellowImage()
         newImageView.image = newImage
@@ -51,10 +49,5 @@ class ImageFontController: UIViewController {
         
         let newUrl = R.file.menuListJson()
         print(newUrl!)
-        
-        
-        
-        /// String
-        
     }
 }

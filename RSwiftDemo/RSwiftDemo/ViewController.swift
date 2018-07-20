@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    fileprivate var dataArr = ["Image&Font", ""]
+    fileprivate var dataArr = ["Image&Font", "Nib&Storyboard"]
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,7 +34,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vcs = [ImageFontController()]
+        //传统方式
+        let nibVC1 = UIStoryboard(name: "NibHome", bundle: nil).instantiateInitialViewController() ?? UIViewController()
+        
+        //R.Swift方式
+        let nibVC = R.storyboard.nibHome().instantiateInitialViewController()
+        let vcs = [ImageFontController(), nibVC!]
         navigationController?.pushViewController(vcs[indexPath.row], animated: true)
     }
 }
